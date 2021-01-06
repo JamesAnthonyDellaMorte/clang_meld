@@ -8,6 +8,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let path_s = Path::new(&args[1]);
     let temp_ext = path_s.extension().unwrap();
+    #[cfg(target_os = "windows")]
     let temp_path = path_s.parent().unwrap();
     let temp_name = path_s.file_stem().unwrap();
     #[cfg(target_os = "windows")]
@@ -68,6 +69,6 @@ fn main() {
         .arg(&args[2])
         .output()
         .expect("Failed to execute command");
- #[cfg(not(target_os = "windows"))]
-        fs::remove_file(temp);
+    #[cfg(not(target_os = "windows"))]
+    fs::remove_file(temp);
 }
