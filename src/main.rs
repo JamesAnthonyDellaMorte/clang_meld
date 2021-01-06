@@ -60,6 +60,7 @@ fn main() {
     if temp_ext == "c" || temp_ext == "cpp" || temp_ext == "h" || temp_ext == "hpp" {
         Command::new(clang_path)
             .arg("-i")
+            .arg("-style=file")
             .arg(&temp)
             .output()
             .expect("Failed to execute command");
