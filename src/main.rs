@@ -2,10 +2,15 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
-use std::process::Command;
+use std::process::{Command, exit};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args[1] == "nul" || args[1] == "/dev/null"
+    {
+        println!("{} does not exist in previous commit",args[2] );
+        exit(0);
+    }
     let path_s = Path::new(&args[1]);
     let temp_ext = path_s.extension().unwrap();
     #[cfg(target_os = "windows")]
@@ -24,6 +29,8 @@ fn main() {
         temp_name.to_str().unwrap(),
         temp_ext.to_str().unwrap()
     );
+    File::create(temp.as_str()).unwrap();
+    fs::copy(&args[1], temp.as_str()).unwrap();
     #[cfg(target_os = "windows")]
     let clang_where = Command::new("where.exe")
         .arg("clang-format")
@@ -55,8 +62,6 @@ fn main() {
     }
     let clang_path = Path::new(clang.as_str());
     let meld_path = Path::new(meld.as_str());
-    File::create(temp.as_str()).unwrap();
-    fs::copy(&args[1], temp.as_str()).unwrap();
     if temp_ext == "c" || temp_ext == "cpp" || temp_ext == "h" || temp_ext == "hpp" {
         Command::new(clang_path)
             .arg("-i")
