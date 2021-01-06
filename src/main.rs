@@ -71,5 +71,5 @@ fn main() {
         .output()
         .expect("Failed to execute command");
     #[cfg(not(target_os = "windows"))]
-    fs::remove_file(temp);
+    fs::remove_file(temp).unwrap();
 }
