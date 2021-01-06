@@ -10,9 +10,16 @@ fn main() {
     let temp_ext = path_s.extension().unwrap();
     let temp_path = path_s.parent().unwrap();
     let temp_name = path_s.file_stem().unwrap();
+    #[cfg(target_os = "windows")]
     let temp = format!(
         "{}{}_temp.{}",
         temp_path.display(),
+        temp_name.to_str().unwrap(),
+        temp_ext.to_str().unwrap()
+    );
+    #[cfg(not(target_os = "windows"))]
+    let temp = format!(
+        "/home/{}_temp.{}",
         temp_name.to_str().unwrap(),
         temp_ext.to_str().unwrap()
     );
