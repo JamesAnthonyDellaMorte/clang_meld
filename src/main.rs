@@ -19,7 +19,7 @@ fn main() {
     );
     #[cfg(not(target_os = "windows"))]
     let temp = format!(
-        "/home/{}_temp.{}",
+        "./{}_temp.{}",
         temp_name.to_str().unwrap(),
         temp_ext.to_str().unwrap()
     );
@@ -68,4 +68,6 @@ fn main() {
         .arg(&args[2])
         .output()
         .expect("Failed to execute command");
+ #[cfg(not(target_os = "windows"))]
+        fs::remove_file(temp);
 }
